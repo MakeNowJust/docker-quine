@@ -9,12 +9,13 @@ RUN sed -i".back" -e 's/\/\/archive.ubuntu.com/\/\/ftp.jaist.ac.jp\/pub\/Linux/g
 
 # aptを更新&必要なソフトをインストール
 RUN apt-get update && apt-get dist-upgrade -y
-RUN apt-get install -y \
-      git              \
-      vim-nox          \
-      build-essential  \
-      man              \
-      curl             \
+RUN apt-get install -y           \
+      git                        \
+      vim-nox                    \
+      build-essential            \
+      man                        \
+      curl                       \
+      software-properties-common \
       language-pack-ja
 
 # ユーザーquineを追加する
