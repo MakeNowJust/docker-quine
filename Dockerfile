@@ -16,10 +16,11 @@ RUN apt-get install -y           \
       man                        \
       curl                       \
       software-properties-common \
+      zsh zsh-doc                \
       language-pack-ja
 
 # ユーザーquineを追加する
-RUN useradd --create-home -s /bin/bash quine && \
+RUN useradd --create-home -s /bin/zsh quine && \
     adduser quine sudo                       && \
     echo "quine:quine" | chpasswd
 # quineはパスワード無しでsudo可能
@@ -31,15 +32,19 @@ RUN update-locale
 
 # ユーザーquineで、quineのホームディレクトリからスタート
 USER quine
+ENV HOME /home/quine
 WORKDIR /home/quine
 
 # dotfilesを追加
-RUN git clone https://github.com/MakeNowJust/dotfiles2 /home/quine/dotfiles && \
-    cd /home/quine/dotfiles && ./install.bash
+RUN git clone --recursive https://github.com/MakeNowJust/dotfiles2 $HOME/dotfiles && \
+    cd $HOME/dotfiles && ./install.bash
+
+# quineを追加
+RUN git clone https://github.com/MakeNowJust/quine $HOME/quine
 
 # 警告を戻す
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND interactive
 
-# start時にbashを起動
-ENV SHELL /bin/bash
-CMD ["/bin/bash"]
+# start時にzshを起動
+ENV SHELL /bin/zsh
+CMD ["/bin/zsh"]
