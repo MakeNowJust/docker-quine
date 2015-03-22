@@ -7,8 +7,8 @@
 .docker:
 	mkdir -p .docker
 
-.docker/% : %.dockerfile .docker
-	docker build $(DOCKER_BUILD_FLAGS) -t quine-$(@:.docker/%=%) -f $< .
+.docker/% : %/Dockerfile .docker
+	docker build $(DOCKER_BUILD_FLAGS) -t quine-$(@:.docker/%=%) $(<D)
 	touch $@
 
 # quineだけは特殊
@@ -19,9 +19,9 @@
 
 # その他の*.dockerfileについて
 
+dockerfiles = $(foreach docker,$(wildcard */Dockerfile),$(docker:%/Dockerfile=%))
 define dockerfile-rule
-$1: quine .docker/$1
+$1: .docker/$1
 endef
-dockerfiles = $(wildcard *.dockerfile)
-$(foreach docker, $(dockerfiles), \
-  $(eval $(call dockerfile-rule,$(docker:%.dockerfile=%))))
+$(foreach docker,$(dockerfiles), \
+	$(eval $(call dockerfile-rule,$(docker))))
