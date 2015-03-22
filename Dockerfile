@@ -24,7 +24,7 @@ RUN useradd --create-home -s /bin/zsh quine && \
     adduser quine sudo                       && \
     echo "quine:quine" | chpasswd
 # quineはパスワード無しでsudo可能
-RUN echo "quine ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/quine
+RUN echo "Defaults:quine !authenticate" > /etc/sudoers.d/quine
 
 # 言語の日本語に設定
 ENV LANG ja_JP.UTF-8
@@ -42,7 +42,7 @@ RUN git clone --recursive https://github.com/MakeNowJust/dotfiles2 $HOME/dotfile
 # quineを追加
 RUN git clone https://github.com/MakeNowJust/quine $HOME/quine
 
-# 警告を戻す
+# apt-get中に出る警告を防ぐ
 ENV DEBIAN_FRONTEND interactive
 
 # start時にzshを起動
