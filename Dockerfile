@@ -22,14 +22,18 @@ ENV DEBIAN_FRONTEND interactive
 
 # ユーザーquineを追加する
 RUN useradd --create-home -s /bin/zsh quine && \
-    adduser quine sudo                       && \
+    adduser quine sudo                      && \
     echo "quine:quine" | chpasswd
 # quineはパスワード無しでsudo可能
-RUN echo "Defaults:quine !authenticate" > /etc/sudoers.d/quine
+RUN echo "Defaults:quine !authenticate" | tee /etc/sudoers.d/quine
 
 # 言語の日本語に設定
 ENV LANG ja_JP.UTF-8
 RUN update-locale
+
+# タイムゾーンもAsia/Tokyoに設定
+RUN echo "Asia/Tokyo" | tee /etc/timezone
+RUN dpkg-reconfigure --frontend noninteractive tzdata
 
 # ユーザーquineで、quineのホームディレクトリからスタート
 USER quine
