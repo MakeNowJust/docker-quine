@@ -35,18 +35,15 @@ RUN update-locale
 RUN echo "Asia/Tokyo" | tee /etc/timezone
 RUN dpkg-reconfigure --frontend noninteractive tzdata
 
+# initialize.zshを追加
+ADD /initialize.zsh /initialize.zsh
+RUN chmod +x /initialize.zsh
+
 # ユーザーquineで、quineのホームディレクトリからスタート
 USER quine
 ENV HOME /home/quine
 WORKDIR $HOME
 
-# dotfilesを追加
-RUN git clone --recursive https://github.com/MakeNowJust/dotfiles2 $HOME/dotfiles && \
-    cd $HOME/dotfiles && ./install.bash
-
-# quineを追加
-RUN git clone https://github.com/MakeNowJust/quine $HOME/quine
-
 # start時にzshを起動
 ENV SHELL /bin/zsh
-CMD ["/bin/zsh"]
+CMD ["/initialize.zsh"]
