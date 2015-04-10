@@ -1,4 +1,4 @@
-# quine-docker
+# docker-quine
 
 Quineを書くためのDockerfileです。完全に私用のために作っています。
 
