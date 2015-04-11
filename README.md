@@ -12,8 +12,8 @@ Quineを書くためのDockerfileです。完全に私用のために作って�
 ## インストール
 
 ```console
-$ sudo docker build -t quine .
-$ sudo docker run -i -t --name quine quine
+$ make
+$ make <language-name>
 ```
 
 
